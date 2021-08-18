@@ -4,11 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyserial = "*"
 pandas = "*"
+pyserial = "*"
+matplotlib = "*"
+numpy = "*"
+tensorflow = "*"
+scikit-learn = "*"
+seaborn = "*"
 requests = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.9.6"

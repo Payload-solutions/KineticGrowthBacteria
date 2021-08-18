@@ -4,11 +4,6 @@ import serial
 import matplotlib.pyplot as plt
 import time
 
-
-ventana_DatE = None
-ventana_DatF = None
-
-
 def VentanaPrinc():
     global VentanaPrinc
     VentanaPrinc=Tk()
@@ -40,9 +35,9 @@ def VentanaPrinc():
 
 def Arduino():
 
-    #Codigo Arduino
-    #Para Leer la entrada Analogica
-    #y enviarla al serial o USB
+    # Codigo Arduino
+    # Para Leer la entrada Analogica
+    # y enviarla al serial o USB
 
     '''
     int value = 0;
@@ -103,7 +98,6 @@ def exito_DatE():
     ventana_DatE.geometry("210x100")
     Label(ventana_DatE, text="Datos Enviados Con Exito", font=("Times New Roman", 14)).pack()
     Button(ventana_DatE, text="OK",font=("Times New Roman", 14), command= exito_CerrarED).place(x=90,y=50)
-		
 
 def Falla_DatF():
     global ventana_DatF
