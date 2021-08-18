@@ -118,6 +118,13 @@ Con estos tengo problemo, no me funciona el destroy me sale
 AttributeError: 'function' object has no attribute 'destroy'
 '''
 
+def send_to_sever(data: dict):
+    try:
+        req = requests.post(url = "http://0.0.0.0:/new_feature", json = data)
+    except Exception as e:
+        print(str(e))
+
+
 def exito_CerrarED():
     exito_DatE.destroy()
 def exito_CerrarFD():
