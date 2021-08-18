@@ -119,10 +119,25 @@ AttributeError: 'function' object has no attribute 'destroy'
 '''
 
 def send_to_sever(data: dict):
-    try:
-        req = requests.post(url = "http://0.0.0.0:/new_feature", json = data)
-    except Exception as e:
-        print(str(e))
+    import requests
+
+
+    data = {
+        "streptococcus_initial_strain_cfu_ml":10,
+        "lactobacillus_initial_strain_cfu_ml":10,
+        "ideal_temperature_c":10,
+        "minimum_milk_proteins":210,
+        "titratable_acidity":56,
+        "pH_milk_sour_":666,
+        "fat_milk_over_100mg_":66,
+        "quality_product":"Regular yogurt",
+        "lactobacillus_final_cfu_ml":555,
+        "streptococcus_final_cfu_ml":25,
+        "quality_product_":8
+    }
+
+    req = requests.post(url="http://0.0.0.0:4000/new_feature", json = data)
+    print(req.text)
 
 
 def exito_CerrarED():
