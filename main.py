@@ -1,8 +1,12 @@
 import os
 from tkinter import *
+from tkinter import messagebox
+import tkinter
 import serial
 import matplotlib.pyplot as plt
 import time
+import signal
+import sys
 
 
 ventana_DatE = None
@@ -29,20 +33,13 @@ def VentanaPrinc():
     
     Button(Frame1, text=" Enviar Datos a la Red ",width="19",
            font=("Times New Roman", 14),command = exito_DatE).place(x=500,y=290)
-    '''
-    Este boton lo deje aqui por si acaso se necesite, si no lo necesitas
-    borralo no mas 
-    '''
+
     #Button(Frame1, text="Datos Del Sensor",width="17",
     #       font=("Times New Roman", 14),command = "").place(x=500,y=300)
     
     VentanaPrinc.mainloop()
 
 def Arduino():
-
-    #Codigo Arduino
-    #Para Leer la entrada Analogica
-    #y enviarla al serial o USB
 
     '''
     int value = 0;
@@ -66,7 +63,7 @@ def Arduino():
     ñañon
     '''
 
-    arduino = serial.Serial('COM6', 9600, timeout=0)
+    arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=0)
     point = 0
     fig, ax = plt.subplots()
     plt.ion()
@@ -76,26 +73,31 @@ def Arduino():
     y = []
 
     while True:
-        data = arduino.readline().decode().strip()
-        time.sleep(0.2)
-        if data:
-            data = int(data)
-            x.append(point)
-            y.append(data)
-            if len(x) > maxlen:
-                x = x[1:]
-                y = y[1:]
-            plt.plot(x, y, color='r')
-            point += 1
-            plt.pause(0.05)
+        try:
+            data = arduino.readline().decode("ascii", errors="replace").strip()
+            data = data.replace("\r\n", "")
+            print(data)
+            # time.sleep(0.2)
+            if data:
+                data = float(data)
+                x.append(point)
+                y.append(data)
+                if len(x) > maxlen:
+                    x = x[1:]
+                    y = y[1:]
+                plt.plot(x, y, color='r')
+                point += 1
+                plt.pause(0.05)
 
-            ax.clear()
-            plt.ylim([0, 1023])
-            plt.show()
-'''
-Estos son como un exito y error del encio de datos
-Como para ponerlos dentro de un try y un catch
-'''
+                ax.clear()
+                plt.ylim([0, 1023])
+                plt.show()
+            # time.sleep(10)
+        except KeyboardInterrupt:
+            # messagebox.showinfo(message="Saliendo", title="Info")
+            print("[*] Saliendo")
+            sys.exit(0)
+
 def exito_DatE():
     global ventana_DatE
     ventana_DatE = Toplevel(VentanaPrinc)
@@ -113,37 +115,11 @@ def Falla_DatF():
     Label(ventana_DatF, text="Datos No Enviados", font=("Times New Roman", 14)).pack()
     Button(ventana_DatF, text="OK",font=("Times New Roman", 14), command= exito_CerrarED).place(x=90,y=50)
 
-'''
-Con estos tengo problemo, no me funciona el destroy me sale
-AttributeError: 'function' object has no attribute 'destroy'
-'''
-
-def send_to_sever(data: dict):
-    import requests
-
-
-    data = {
-        "streptococcus_initial_strain_cfu_ml":10,
-        "lactobacillus_initial_strain_cfu_ml":10,
-        "ideal_temperature_c":10,
-        "minimum_milk_proteins":210,
-        "titratable_acidity":56,
-        "pH_milk_sour_":666,
-        "fat_milk_over_100mg_":66,
-        "quality_product":"Regular yogurt",
-        "lactobacillus_final_cfu_ml":555,
-        "streptococcus_final_cfu_ml":25,
-        "quality_product_":8
-    }
-
-    req = requests.post(url="http://0.0.0.0:4000/new_feature", json = data)
-    print(req.text)
-
 
 def exito_CerrarED():
-    exito_DatE.destroy()
+    ventana_DatE.destroy()
 def exito_CerrarFD():
-    exito_DatF.destroy()
+    ventana_DatF.destroy()
 
 VentanaPrinc()
 
